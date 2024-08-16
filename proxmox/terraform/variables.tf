@@ -12,6 +12,7 @@ variable "pm_user" {
 
 variable "pm_password" {
   default = ""
+  sensitive = true
 }
 
 variable "pm_api_token_id" {
@@ -20,6 +21,7 @@ variable "pm_api_token_id" {
 
 variable "pm_api_token_secret" {
   default = ""
+  sensitive = true
 }
 
 variable "ssh_key_file" {
