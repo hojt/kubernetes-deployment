@@ -3,7 +3,7 @@ resource "proxmox_vm_qemu" "control_plane" {
   name              = "control-plane-${count.index}.k8s.cluster"
   target_node       = "${var.pm_node}"
 
-  clone             = var.template_name
+  clone             = "${var.template_name}"
   full_clone        = true
 
   agent             = 1
@@ -50,8 +50,10 @@ resource "proxmox_vm_qemu" "worker_nodes" {
   name              = "worker-${count.index}.k8s.cluster"
   target_node       = "${var.pm_node}"
 
-  clone             = "ubuntu-2404-cloudinit-template"
+  clone             = "${var.template_name}"
+  full_clone        = true
 
+  agent             = 1
   os_type           = "cloud-init"
   cores             = 4
   sockets           = "1"
