@@ -4,10 +4,10 @@
   name: "create VM template"
   vars:
     vm:
-      cloud_image_url: https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
-      cloud_image_path: /tmp/ubuntu-2004-server-amd64.qcow2
+      cloud_image_url: https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+      cloud_image_path: /tmp/ubuntu-2404-server-amd64.qcow2
       template_id: 1001
-      template_name: ubuntu-2004-cloudinit-template
+      template_name: ubuntu-2404-cloudinit-template
       template_memory: 4096
   tasks:
     - name : download cloud image

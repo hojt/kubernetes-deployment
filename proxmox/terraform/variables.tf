@@ -12,8 +12,22 @@ variable "pm_user" {
 
 variable "pm_password" {
   default = ""
+  sensitive = true
+}
+
+variable "pm_api_token_id" {
+  default = ""
+}
+
+variable "pm_api_token_secret" {
+  default = ""
+  sensitive = true
 }
 
 variable "ssh_key_file" {
   default = "~/.ssh/id_rsa.pub"
+}
+
+variable "template_name" {
+  default = "ubuntu-2404-cloudinit-template"
 }

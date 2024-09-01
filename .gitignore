@@ -4,3 +4,4 @@ admin.conf
 *.pem
 *.csr
 csr.json
+.env

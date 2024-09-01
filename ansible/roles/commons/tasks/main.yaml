@@ -3,8 +3,11 @@
   apt:
     pkg:
       - apt-transport-https
+      - ca-certificates
       - curl
+      - gnupg
     update_cache: yes
+    state: latest
 
 - name: disable swap
   become: yes

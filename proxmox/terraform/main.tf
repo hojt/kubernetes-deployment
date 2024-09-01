@@ -3,8 +3,10 @@ resource "proxmox_vm_qemu" "control_plane" {
   name              = "control-plane-${count.index}.k8s.cluster"
   target_node       = "${var.pm_node}"
 
-  clone             = "ubuntu-2004-cloudinit-template"
+  clone             = "${var.template_name}"
+  full_clone        = true
 
+  agent             = 1
   os_type           = "cloud-init"
   cores             = 4
   sockets           = "1"
@@ -13,11 +15,23 @@ resource "proxmox_vm_qemu" "control_plane" {
   scsihw            = "virtio-scsi-pci"
   bootdisk          = "scsi0"
 
-  disk {
-    size            = "20G"
-    type            = "scsi"
-    storage         = "local-lvm"
-    iothread        = 1
+  disks {
+    ide {
+      ide2 {
+        cloudinit {
+          storage = "local-lvm"
+        }
+      }
+    }
+    scsi {
+      scsi0 {
+        disk {
+          size      = "20G"
+          storage   = "local-lvm"
+          iothread  = true
+        }
+      }
+    }
   }
 
   network {
@@ -27,8 +41,8 @@ resource "proxmox_vm_qemu" "control_plane" {
 
   # cloud-init settings
   # adjust the ip and gateway addresses as needed
-  ipconfig0         = "ip=192.168.0.11${count.index}/24,gw=192.168.0.1"
-  sshkeys = file("${var.ssh_key_file}")
+  ipconfig0         = "ip=192.168.1.${10 + count.index}/16,gw=192.168.1.1"
+  sshkeys           = file("${var.ssh_key_file}")
 }
 
 resource "proxmox_vm_qemu" "worker_nodes" {
@@ -36,8 +50,10 @@ resource "proxmox_vm_qemu" "worker_nodes" {
   name              = "worker-${count.index}.k8s.cluster"
   target_node       = "${var.pm_node}"
 
-  clone             = "ubuntu-2004-cloudinit-template"
+  clone             = "${var.template_name}"
+  full_clone        = true
 
+  agent             = 1
   os_type           = "cloud-init"
   cores             = 4
   sockets           = "1"
@@ -46,11 +62,22 @@ resource "proxmox_vm_qemu" "worker_nodes" {
   scsihw            = "virtio-scsi-pci"
   bootdisk          = "scsi0"
 
-  disk {
-    size            = "20G"
-    type            = "scsi"
-    storage         = "local-lvm"
-    iothread        = 1
+  disks {
+    ide {
+      ide2 {
+        cloudinit {
+          storage = "local-lvm"
+        }
+      }
+    }
+    scsi {
+      scsi0 {
+        disk {
+          size      = "20G"
+          storage   = "local-lvm"
+        }
+      }
+    }
   }
 
   network {
@@ -60,6 +87,6 @@ resource "proxmox_vm_qemu" "worker_nodes" {
 
   # cloud-init settings
   # adjust the ip and gateway addresses as needed
-  ipconfig0         = "ip=192.168.0.12${count.index}/24,gw=192.168.0.1"
-  sshkeys = file("${var.ssh_key_file}")
+  ipconfig0         = "ip=192.168.1.${20 + count.index}/16,gw=192.168.1.1"
+  sshkeys           = file("${var.ssh_key_file}")
 }
